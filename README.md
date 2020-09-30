@@ -1,1 +1,1 @@
-# projeto_aplicacao_distribuida
+# project face recognition
