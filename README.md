@@ -1,8 +1,7 @@
-# project face recognition
 # face_recognition
 Um algoritmo de detecção e reconhecimento facial em Python3 utilizando a biblioteca OpenCV e conceitos de sistemas distribuídos.
 
-O protocolo de comunicação utilizado será o TCP, e para a detecção e reconhecimento facial será usada a biblioteca OpenCV com diferentes algoritmos de aprendizado: Eigenface, Fisherface e Lbph.
+Para a comunicação entre os usuários/servidores será usado o protocolo de comunicação TCP, e para o reconhecimento facial três classificadores serão testados: Eigenface, Fisherface e LBPH.
 
 ## Arquitetura e funcionamento do sistema
 
@@ -10,35 +9,14 @@ O protocolo de comunicação utilizado será o TCP, e para a detecção e reconh
   <img src="Arquitetura Sistema Distribuído.png"/>
 </p>
 
-1. O usuário faz o envio de uma mensagem de acordo com um número identificador que irá indicar a operação.
+- Para que um indivíduo seja reconhecido a partir de uma imagem, é necessário que o mesmo forneça algumas fotos de seu rosto inteiro para fins de treinamento do algoritmo.
 
-	Exemplo:
-	
-	1. Enviar imagens para base de dados do servidor de treinamento e reconhecimento facial, para que posteriormente seja realizado o treinamento do algoritmo de aprendizado.
+- Assim que o usuário executa o programa, ele deve escolher entre treinar o algoritmo ou realizar o reconhecimento facial, a partir dessa escolha uma mensagem é enviada para o servidor de detecção facial, esta mensagem contém o identificador da operação e os parâmetros necessários para que a operação seja realizada.
 
-	2. Enviar imagem para detecção e reconhecimento facial.
+- Escolhendo a opção de treinamento, o usuário precisará fornecer o seu nome e algumas fotos de seu rosto que passarão por um processo de detecção facial no primeiro servidor, as imagens em que nenhum rosto foi detectado serão retornadas ao cliente, e as demais serão transferidas ao segundo servidor juntamente com o identificador da operação e o nome do usuário para que assim seja realizado o treinamento do algoritmo com esse novo indivíduo. 
+	- O treinamento irá gerar um arquivo `.yml` que será armazenado neste mesmo servidor;
+	- O status da operação é retornado ao cliente.
 
-2.  O servidor de detecção facial é responsável por receber a requisição do cliente, fazer a detecção de faces e encaminhar para o servidor de treinamento e reconhecimento, que irá realizar a operação de acordo com o identificador.
-   
-	-  As imagens que tiveram rostos detectados serão encaminhadas para o servidor de treinamento e reconhecimento facial.
-    
-	- As imagens que não tiveram rostos detectados serão retornadas ao usuário.
-    
-
-3.  O servidor de treinamento e reconhecimento facial receberá apenas as imagens que possuem rostos.
-    
-
-	Realiza a operação de acordo com o identificador:
-
-	1. O servidor armazena a imagem localmente e realiza o treinamento.
-
-		-  Caso o armazenamento seja realizado corretamente, retorna que a operação foi realizada com sucesso.
-    
-		- Caso aconteça algum problema, retorna uma mensagem contendo o respectivo erro.
-    
-
-	2. Utiliza a foto recebida e o arquivo de treinamento para executar o algoritmo de reconhecimento facial.
-
-		- Caso reconheça as faces, retorna a identificação dos indivíduos que constam na foto.
-    
-		- Caso não reconheça nenhuma face, retorna para o usuário que as pessoas não foram identificadas.
+- Escolhendo a opção de reconhecimento facial, o usuário precisará fornecer apenas uma foto contendo pelo menos um rosto. Esta imagem também passará por um processo de detecção facial no primeiro servidor que retornará uma mensagem ao cliente caso não encontre pelo menos uma face na imagem. Assim que a imagem é validada, a mesma juntamente com o código da operação será repassada ao segundo servidor para que o reconhecimento facial seja feito. 
+	- A foto recebida e o arquivo `.yml` gerado pelo treinamento serão usados para a execução do algoritmo de reconhecimento facial;
+	- A identificação dos indivíduos que constam na foto é retornada ao cliente.
