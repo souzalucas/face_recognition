@@ -20,3 +20,9 @@ Para a comunicação entre os usuários/servidores será usado o protocolo de co
 - Escolhendo a opção de reconhecimento facial, o usuário precisará fornecer apenas uma foto contendo pelo menos um rosto. Esta imagem também passará por um processo de detecção facial no primeiro servidor que retornará uma mensagem ao cliente caso não encontre pelo menos uma face na imagem. Assim que a imagem é validada, a mesma juntamente com o código da operação será repassada ao segundo servidor para que o reconhecimento facial seja feito. 
 	- A foto recebida e o arquivo `.yml` gerado pelo treinamento serão usados para a execução do algoritmo de reconhecimento facial;
 	- A identificação dos indivíduos que constam na foto é retornada ao cliente.
+
+- Otimização: Encontramos uma função na biblioteca que habilita o uso das funções do openCv de forma otimizada, o nome da função é cv.useOptimized(), para que assim possa agilizar o processo de detecção e reconhecimento das imagens.
+
+- Parelilismo: Para que os clientes consigam acessar os servidores paralelamente, pensamos em fazer o uso de Threads em python, tanto no servidor que faz a detecção, quanto no que faz o reconhecimento, assim permitindo o acesso de multiplos clientes. 
+
+
