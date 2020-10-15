@@ -6,7 +6,7 @@ Para a comunicação entre os usuários/servidores será usado o protocolo de co
 ## Arquitetura e funcionamento do sistema
 
 <p align="center">
-  <img src="Arquitetura Sistema Distribuído.png"/>
+  <img src="arquitetura.png"/>
 </p>
 
 - Para que um indivíduo seja reconhecido a partir de uma imagem, é necessário que o mesmo forneça algumas fotos de seu rosto inteiro para fins de treinamento do algoritmo.
