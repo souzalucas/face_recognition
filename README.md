@@ -1,7 +1,7 @@
 # face_recognition
 Um algoritmo de detecção e reconhecimento facial em Python3 utilizando a biblioteca OpenCV e conceitos de sistemas distribuídos.
 
-Para a comunicação entre os usuários/servidores será usado o protocolo de comunicação TCP, e para o reconhecimento facial três classificadores serão testados: Eigenface, Fisherface e LBPH.
+Para a comunicação entre os usuários/servidores será usado o protocolo de comunicação RPC, e para o reconhecimento facial três classificadores serão testados: Eigenface, Fisherface e LBPH.
 
 ## Arquitetura e funcionamento do sistema
 
