@@ -11,10 +11,9 @@ message Chunk {
 
 message Request {
   string name = 1;
-  Chunk image = 2;
 }
 
 message Reply {
   string message = 1;
-  float size = 2;
+  int32 length = 3;
 }

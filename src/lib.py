@@ -1,20 +1,17 @@
 import os
 from concurrent import futures
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
-from threading import Thread 
 import grpc
 import time
 
 import recognitionFacial_pb2, recognitionFacial_pb2_grpc
-# import recognitionFacial_pb2, recognitionFacial_pb2_grpc
 
-CHUNK_SIZE = 1024 * 4096  # 1MB
+CHUNK_SIZE = 1024 * 1024  # 1MB
+
 
 def get_file_chunks(filename):
     with open(filename, 'rb') as f:
         while True:
-            piece = f.read(CHUNK_SIZE);
+            piece = f.read(CHUNK_SIZE)
             if len(piece) == 0:
                 return
             yield recognitionFacial_pb2.Chunk(buffer=piece)
@@ -41,13 +38,13 @@ class FileClient:
         save_chunks_to_file(response, out_file_name)
 
 
-class FileServer(recognitionFacial_pb2_grpc.recognitionFacial):
+class recognitionFacial(recognitionFacial_pb2_grpc.recognitionFacialServicer):
     def __init__(self):
 
-        class Servicer(recognitionFacial_pb2_grpc.recognitionFacial):
+        class Servicer(recognitionFacial_pb2_grpc.recognitionFacialServicer):
             def __init__(self):
                 self.tmp_file_name = '/tmp/server_tmp'
-
+    
             def upload(self, request_iterator, context):
                 save_chunks_to_file(request_iterator, self.tmp_file_name)
                 return recognitionFacial_pb2.Reply(length=os.path.getsize(self.tmp_file_name))
