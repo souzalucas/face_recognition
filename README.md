@@ -4,7 +4,6 @@
 - Para a comunicação entre os usuários/servidores será usado o protocolo de comunicação RPC, e para o reconhecimento facial três classificadores serão testados: Eigenface, Fisherface e LBPH.
 
 ## Arquitetura e funcionamento do sistema
-Server side:
 
 <p align="center">
   <img src="arquitetura.png"/>
@@ -24,12 +23,4 @@ Server side:
 
 - Otimização: Encontramos uma função na biblioteca que habilita o uso das funções do openCv de forma otimizada, o nome da função é cv.useOptimized(), para que assim possa agilizar o processo de detecção e reconhecimento das imagens.
 
-- Paralelismo: Para que os clientes consigam acessar os servidores paralelamente, pensamos em fazer o uso de Threads em python, tanto no servidor que faz a detecção, quanto no que faz o reconhecimento, assim permitindo o acesso de multiplos clientes. 
-```
-python3.6 src/demo_server.py
-```
-
-Client side:
-
-```
-python3.6 src/demo_client.py
+- Paralelismo: Para que os clientes consigam acessar os servidores paralelamente, pensamos em fazer o uso de Threads em python, tanto no servidor que faz a detecção, quanto no que faz o reconhecimento, assim permitindo o acesso de multiplos clientes.
