@@ -1,4 +1,4 @@
 import lib
 
 if __name__ == '__main__':
-    lib.recognitionFacial().start(8888)
+    lib.FileServer().start(8000)

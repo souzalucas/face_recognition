@@ -3,10 +3,11 @@ from concurrent import futures
 import grpc
 import time
 
+from random import randint
+
 import recognitionFacial_pb2, recognitionFacial_pb2_grpc
 
-CHUNK_SIZE = 1024 * 1024  # 1MB
-
+CHUNK_SIZE = 1  # 1MB
 
 def get_file_chunks(filename):
     with open(filename, 'rb') as f:
@@ -16,12 +17,10 @@ def get_file_chunks(filename):
                 return
             yield recognitionFacial_pb2.Chunk(buffer=piece)
 
-
 def save_chunks_to_file(chunks, filename):
     with open(filename, 'wb') as f:
         for chunk in chunks:
             f.write(chunk.buffer)
-
 
 class FileClient:
     def __init__(self, address):
@@ -33,12 +32,7 @@ class FileClient:
         response = self.stub.upload(chunks_generator)
         assert response.length == os.path.getsize(in_file_name)
 
-    def download(self, target_name, out_file_name):
-        response = self.stub.download(recognitionFacial_pb2.Request(name=target_name))
-        save_chunks_to_file(response, out_file_name)
-
-
-class recognitionFacial(recognitionFacial_pb2_grpc.recognitionFacialServicer):
+class FileServer(recognitionFacial_pb2_grpc.recognitionFacialServicer):
     def __init__(self):
 
         class Servicer(recognitionFacial_pb2_grpc.recognitionFacialServicer):
@@ -48,10 +42,6 @@ class recognitionFacial(recognitionFacial_pb2_grpc.recognitionFacialServicer):
             def upload(self, request_iterator, context):
                 save_chunks_to_file(request_iterator, self.tmp_file_name)
                 return recognitionFacial_pb2.Reply(length=os.path.getsize(self.tmp_file_name))
-
-            def download(self, request, context):
-                if request.name:
-                    return get_file_chunks(self.tmp_file_name)
 
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
         recognitionFacial_pb2_grpc.add_recognitionFacialServicer_to_server(Servicer(), self.server)
