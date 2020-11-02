@@ -1,11 +1,13 @@
 syntax = "proto3";
 
-service recognitionFacial {
-  rpc upload(stream Chunk) returns (Reply) {}
+service facialDetection {
+  rpc uploadDetection(stream Chunk) returns (Reply) {}
 }
 
 message Chunk {
   bytes buffer = 1;
+  string nameFile = 2;
+  string identifier = 3;
 }
 
 message Request {
