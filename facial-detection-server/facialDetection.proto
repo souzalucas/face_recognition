@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-service recognitionFacial {
+service facialDetection {
   rpc upload(stream Chunk) returns (Reply) {}
   rpc download(Request) returns (stream Chunk) {}
 }

@@ -15,9 +15,9 @@ if __name__ == '__main__':
     print(in_file_name[0])
     client.upload(in_file_name[0])
 
-    # out_file_name = '/tmp/large_file_out'
-    # if os.path.exists(out_file_name):
-        # os.remove(out_file_name)
-    # client.download('whatever_name', out_file_name)
-    # os.system(f'sha1sum {in_file_name}')
-    # os.system(f'sha1sum {out_file_name}')
+    out_file_name = '/tmp/large_file_out'
+    if os.path.exists(out_file_name):
+        os.remove(out_file_name)
+    client.download('whatever_name', out_file_name)
+    os.system(f'sha1sum {in_file_name}')
+    os.system(f'sha1sum {out_file_name}')

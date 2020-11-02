@@ -1,9 +1,7 @@
-
 syntax = "proto3";
 
-service FileServer {
+service recognitionFacial {
   rpc upload(stream Chunk) returns (Reply) {}
-  rpc download(Request) returns (stream Chunk) {}
 }
 
 message Chunk {
@@ -15,5 +13,6 @@ message Request {
 }
 
 message Reply {
-  int32 length = 1;
+  string message = 1;
+  int32 length = 3;
 }

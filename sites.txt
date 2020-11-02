@@ -1,3 +1,0 @@
-https://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_Image_Object_Detection_Face_Detection_Haar_Cascade_Classifiers.php
-
-https://github.com/dacom-cm/trielo-web/blob/master/src/pages/login/index.js
