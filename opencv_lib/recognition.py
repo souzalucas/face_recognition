@@ -1,12 +1,12 @@
 import cv2
 import numpy as np
 import os
-import facesDetection
+import detection
 
-class RecFaces:
+class RecognitionFaces:
   def __init__(self):
     # Detector de faces
-    self.detector = detecFaces.DetecFaces()
+    self.detector = detection.DetectionFaces()
 
     # Fonte para escrita do identificador
     self.font = cv2.FONT_HERSHEY_COMPLEX_SMALL

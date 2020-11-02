@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 
-class DetecFaces:
+class DetectionFaces:
   def __init__(self):
     # Detector de faces
     self.detector = cv2.CascadeClassifier('cascades/haarcascade_frontalface_default.xml')
