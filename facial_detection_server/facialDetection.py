@@ -14,8 +14,9 @@ class facialDetection:
         channel = grpc.insecure_channel(address)
         self.stub = recognitionFacial_pb2_grpc.recognitionFacialStub(channel)
 
-        # self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
-        # recognitionFacial_pb2_grpc.add_recognitionFacialServicer_to_server(facialDetectionServer(), self.server)
+        # Faz a criação do servidor
+        self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
+        recognitionFacial_pb2_grpc.add_recognitionFacialServicer_to_server(facialDetection(), self.server)
         
     def get_file_chunks(self, filename):
       with open(filename, 'rb') as f:
@@ -25,7 +26,7 @@ class facialDetection:
                   return
               yield recognitionFacial_pb2.Chunk(buffer=piece)
 
-    def save_chunks_to_file(self,chunks, filename):
+    def save_chunks_to_file(self, chunks, filename):
         with open(filename, 'wb') as f:
             for chunk in chunks:
                 f.write(chunk.buffer)
@@ -42,8 +43,10 @@ class facialDetection:
         save_chunks_to_file(request_iterator, self.tmp_file_name)
         return recognitionFacial_pb2.Reply(length=os.path.getsize(self.tmp_file_name))
 
+    # Inicializando server
     def startServer(self, port):
         self.server.add_insecure_port(f'[::]:{port}')
+        # inicializa servidor
         self.server.start()
 
         try:
