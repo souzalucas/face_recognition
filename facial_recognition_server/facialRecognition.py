@@ -1,3 +1,44 @@
 import lib
+import time
+import grpc
+import os
+from concurrent import futures
+from ..user import user_pb2, user_pb2_grpc
 
-lib.FileServer().start(8001)
+CHUNK_SIZE = 1 
+
+# No init deverá ser passado o ip/porta do cliente para estabeler a comunicação
+# e retornar o dado
+class FacialRecognition:
+    def __init__(self, address):
+        channel = grpc.insecure_channel(address)
+        self.stub = user_pb2_grpc.recognitionFacialStub(channel)
+
+        # self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
+        # user_pb2_grpc.add_recognitionFacialServicer_to_server(FacialRecognitionServer(), self.server)
+        
+    def save_chunks_to_file(self,chunks, filename):
+        with open(filename, 'wb') as f:
+            for chunk in chunks:
+                f.write(chunk.buffer)
+
+    # Functions Server
+    def upload(self, request_iterator, context):
+        save_chunks_to_file(request_iterator, self.tmp_file_name)
+        return user_pb2.Reply(length=os.path.getsize(self.tmp_file_name))
+
+    def startServer(self, port):
+        self.server.add_insecure_port(f'[::]:{port}')
+        self.server.start()
+
+        try:
+            while True:
+                time.sleep(60 * 60 * 24)
+
+        except KeyboardInterrupt:
+            self.server.stop(0)
+
+# Inicializa com endereço do cliente
+Recognition = FacialRecognition('localhost:8001')
+
+Recognition().startServer(8001)

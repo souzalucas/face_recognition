@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+service user {
+  rpc message(Empty) returns (Reply) {}
+}
+
+message Empty {}
+
+message Reply {
+  string identifier = 1;
+}

@@ -8,6 +8,7 @@ message Chunk {
   bytes buffer = 1;
   string nameFile = 2;
   string identifier = 3;
+  string ipPort = 4;
 }
 
 message Request {
