@@ -19,7 +19,7 @@ class RecognitionFaces:
   # Reconhecedor Eingenface
   def eigenFace(self, image):
     # Arquivo do algoritmo treinado
-    self.eigenface.read('classificadorEingen.yml')
+    self.eigenface.read('classifierEingen.yml')
 
     # Faz a deteccao de faces
     number, detectedFaces, grayImage = self.detector.start(image)
