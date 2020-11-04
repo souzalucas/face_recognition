@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-service RecognitionFacial {
-  rpc UploadTraining(stream Chunk) returns (Reply) {}
-  rpc UploadRecognition(stream Chunk) returns (Reply) {}
+service recognitionFacial {
+  rpc uploadRecognition(stream Chunk) returns (Reply) {}
+  rpc recognition(stream Chunk) returns (Reply) {}
 }
 
 message Chunk {

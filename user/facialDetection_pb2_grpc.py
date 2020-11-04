@@ -5,7 +5,7 @@ import grpc
 import facialDetection_pb2 as facialDetection__pb2
 
 
-class FacialDetectionStub(object):
+class facialDetectionStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -14,42 +14,42 @@ class FacialDetectionStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.UploadDetection = channel.stream_unary(
-                '/FacialDetection/UploadDetection',
+        self.uploadDetection = channel.stream_unary(
+                '/facialDetection/uploadDetection',
                 request_serializer=facialDetection__pb2.Chunk.SerializeToString,
                 response_deserializer=facialDetection__pb2.Reply.FromString,
                 )
 
 
-class FacialDetectionServicer(object):
+class facialDetectionServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def UploadDetection(self, request_iterator, context):
+    def uploadDetection(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_FacialDetectionServicer_to_server(servicer, server):
+def add_facialDetectionServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'UploadDetection': grpc.stream_unary_rpc_method_handler(
-                    servicer.UploadDetection,
+            'uploadDetection': grpc.stream_unary_rpc_method_handler(
+                    servicer.uploadDetection,
                     request_deserializer=facialDetection__pb2.Chunk.FromString,
                     response_serializer=facialDetection__pb2.Reply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'FacialDetection', rpc_method_handlers)
+            'facialDetection', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class FacialDetection(object):
+class facialDetection(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def UploadDetection(request_iterator,
+    def uploadDetection(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -59,7 +59,7 @@ class FacialDetection(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/FacialDetection/UploadDetection',
+        return grpc.experimental.stream_unary(request_iterator, target, '/facialDetection/uploadDetection',
             facialDetection__pb2.Chunk.SerializeToString,
             facialDetection__pb2.Reply.FromString,
             options, channel_credentials,

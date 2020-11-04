@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x15\x66\x61\x63ialDetection.proto\"Y\n\x05\x43hunk\x12\x0e\n\x06\x62uffer\x18\x01 \x01(\x0c\x12\x10\n\x08nameFile\x18\x02 \x01(\t\x12\x12\n\nidentifier\x18\x03 \x01(\t\x12\x0e\n\x06ipPort\x18\x04 \x01(\t\x12\n\n\x02op\x18\x05 \x01(\x05\"\x17\n\x07Request\x12\x0c\n\x04name\x18\x01 \x01(\t\"(\n\x05Reply\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x0e\n\x06length\x18\x03 \x01(\x05\x32\x38\n\x0f\x46\x61\x63ialDetection\x12%\n\x0fUploadDetection\x12\x06.Chunk\x1a\x06.Reply\"\x00(\x01\x62\x06proto3'
+  serialized_pb=b'\n\x15\x66\x61\x63ialDetection.proto\"Y\n\x05\x43hunk\x12\x0e\n\x06\x62uffer\x18\x01 \x01(\x0c\x12\x10\n\x08nameFile\x18\x02 \x01(\t\x12\x12\n\nidentifier\x18\x03 \x01(\t\x12\x0e\n\x06ipPort\x18\x04 \x01(\t\x12\n\n\x02op\x18\x05 \x01(\x05\"\x17\n\x07Request\x12\x0c\n\x04name\x18\x01 \x01(\t\"(\n\x05Reply\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x0e\n\x06length\x18\x03 \x01(\x05\x32\x38\n\x0f\x66\x61\x63ialDetection\x12%\n\x0fuploadDetection\x12\x06.Chunk\x1a\x06.Reply\"\x00(\x01\x62\x06proto3'
 )
 
 
@@ -184,8 +184,8 @@ _sym_db.RegisterMessage(Reply)
 
 
 _FACIALDETECTION = _descriptor.ServiceDescriptor(
-  name='FacialDetection',
-  full_name='FacialDetection',
+  name='facialDetection',
+  full_name='facialDetection',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
@@ -194,8 +194,8 @@ _FACIALDETECTION = _descriptor.ServiceDescriptor(
   serialized_end=239,
   methods=[
   _descriptor.MethodDescriptor(
-    name='UploadDetection',
-    full_name='FacialDetection.UploadDetection',
+    name='uploadDetection',
+    full_name='facialDetection.uploadDetection',
     index=0,
     containing_service=None,
     input_type=_CHUNK,
@@ -206,6 +206,6 @@ _FACIALDETECTION = _descriptor.ServiceDescriptor(
 ])
 _sym_db.RegisterServiceDescriptor(_FACIALDETECTION)
 
-DESCRIPTOR.services_by_name['FacialDetection'] = _FACIALDETECTION
+DESCRIPTOR.services_by_name['facialDetection'] = _FACIALDETECTION
 
 # @@protoc_insertion_point(module_scope)
