@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+service Detection {
+  rpc imageSave(stream Chunk) returns (ReplyImageSave) {}
+  rpc recognition(stream Chunk) returns (ReplyRecognition) {}
+}
+
+message Chunk {
+  bytes buffer = 1;
+  string fileName = 2;
+  int32 fileNumber = 3;
+  string userName = 4;
+}
+
+message ReplyImageSave {
+  string status = 1;
+  string message = 2;
+  int32 length = 3;
+}
+
+message ReplyRecognition {
+  string status = 1;
+  string message = 2;
+  int32 length = 3;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+service TrainingRecognition {
+  rpc saveImage(stream Piece) returns (ReplySaveImage) {}
+  rpc recognize(stream Piece) returns (ReplyRecognize) {}
+}
+
+message Piece {
+  bytes buffer = 1;
+  string fileName = 2;
+  int32 fileNumber = 3;
+  string userName = 4;
+}
+
+message ReplySaveImage {
+  string status = 1;
+  string message = 2;
+  int32 length = 3;
+}
+
+message ReplyRecognize {
+  string status = 1;
+  string message = 2;
+  int32 length = 3;
+}

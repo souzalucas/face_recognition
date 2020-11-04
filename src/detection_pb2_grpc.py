@@ -2,10 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import recognitionFacial_pb2 as recognitionFacial__pb2
+from proto import detection_pb2 as proto_dot_detection__pb2
 
 
-class recognitionFacialStub(object):
+class DetectionStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -14,58 +14,58 @@ class recognitionFacialStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.upload = channel.stream_unary(
-                '/recognitionFacial/upload',
-                request_serializer=recognitionFacial__pb2.Chunk.SerializeToString,
-                response_deserializer=recognitionFacial__pb2.Reply.FromString,
+        self.imageSave = channel.stream_unary(
+                '/Detection/imageSave',
+                request_serializer=proto_dot_detection__pb2.Chunk.SerializeToString,
+                response_deserializer=proto_dot_detection__pb2.ReplyImageSave.FromString,
                 )
-        self.download = channel.unary_stream(
-                '/recognitionFacial/download',
-                request_serializer=recognitionFacial__pb2.Request.SerializeToString,
-                response_deserializer=recognitionFacial__pb2.Chunk.FromString,
+        self.recognition = channel.stream_stream(
+                '/Detection/recognition',
+                request_serializer=proto_dot_detection__pb2.Chunk.SerializeToString,
+                response_deserializer=proto_dot_detection__pb2.ReplyRecognition.FromString,
                 )
 
 
-class recognitionFacialServicer(object):
+class DetectionServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def upload(self, request_iterator, context):
+    def imageSave(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def download(self, request, context):
+    def recognition(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_recognitionFacialServicer_to_server(servicer, server):
+def add_DetectionServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'upload': grpc.stream_unary_rpc_method_handler(
-                    servicer.upload,
-                    request_deserializer=recognitionFacial__pb2.Chunk.FromString,
-                    response_serializer=recognitionFacial__pb2.Reply.SerializeToString,
+            'imageSave': grpc.stream_unary_rpc_method_handler(
+                    servicer.imageSave,
+                    request_deserializer=proto_dot_detection__pb2.Chunk.FromString,
+                    response_serializer=proto_dot_detection__pb2.ReplyImageSave.SerializeToString,
             ),
-            'download': grpc.unary_stream_rpc_method_handler(
-                    servicer.download,
-                    request_deserializer=recognitionFacial__pb2.Request.FromString,
-                    response_serializer=recognitionFacial__pb2.Chunk.SerializeToString,
+            'recognition': grpc.stream_stream_rpc_method_handler(
+                    servicer.recognition,
+                    request_deserializer=proto_dot_detection__pb2.Chunk.FromString,
+                    response_serializer=proto_dot_detection__pb2.ReplyRecognition.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'recognitionFacial', rpc_method_handlers)
+            'Detection', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class recognitionFacial(object):
+class Detection(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def upload(request_iterator,
+    def imageSave(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -75,14 +75,14 @@ class recognitionFacial(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/recognitionFacial/upload',
-            recognitionFacial__pb2.Chunk.SerializeToString,
-            recognitionFacial__pb2.Reply.FromString,
+        return grpc.experimental.stream_unary(request_iterator, target, '/Detection/imageSave',
+            proto_dot_detection__pb2.Chunk.SerializeToString,
+            proto_dot_detection__pb2.ReplyImageSave.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def download(request,
+    def recognition(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -92,8 +92,8 @@ class recognitionFacial(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/recognitionFacial/download',
-            recognitionFacial__pb2.Request.SerializeToString,
-            recognitionFacial__pb2.Chunk.FromString,
+        return grpc.experimental.stream_stream(request_iterator, target, '/Detection/recognition',
+            proto_dot_detection__pb2.Chunk.SerializeToString,
+            proto_dot_detection__pb2.ReplyRecognition.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
