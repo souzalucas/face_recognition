@@ -1,8 +1,8 @@
 syntax = "proto3";
 
 service Detection {
-  rpc imageSave(stream Chunk) returns (ReplyImageSave) {}
-  rpc recognition(stream Chunk) returns (ReplyRecognition) {}
+  rpc imageSave(stream Chunk) returns (ReplyDetection) {}
+  rpc recognition(stream Chunk) returns (ReplyDetection) {}
 }
 
 message Chunk {
@@ -12,13 +12,7 @@ message Chunk {
   string userName = 4;
 }
 
-message ReplyImageSave {
-  string status = 1;
-  string message = 2;
-  int32 length = 3;
-}
-
-message ReplyRecognition {
+message ReplyDetection {
   string status = 1;
   string message = 2;
   int32 length = 3;

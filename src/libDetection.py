@@ -65,9 +65,9 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         number_faces, detectedFaces, grayImage = self.detec.start(image)
 
         if(number_faces == 0):
-          return detection_pb2.ReplyImageSave(status = '1', message = "Imagem" + file_name + "Não contém um rosto")
+          return detection_pb2.ReplyDetection(status = '1', message = "Imagem" + file_name + "Não contém um rosto")
         elif(number_faces > 1):
-          return detection_pb2.ReplyImageSave(status = '2', message = "Imagem" + file_name + "Tem mais de um rosto")
+          return detection_pb2.ReplyDetection(status = '2', message = "Imagem" + file_name + "Tem mais de um rosto")
         else:
           # Envia imagem para o servidor 2
           chunks_generator = get_file_chunks(tmp_file_name, file_number, user_name)
@@ -75,7 +75,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
           # Apaga imagem temporaria
           os.remove(tmp_file_name)
           # Retorna resposta do servidor 2
-          return detection_pb2.ReplyImageSave(status = response.status, message = response.message)
+          return detection_pb2.ReplyDetection(status = response.status, message = response.message)
 
       def recognition(self, request_iterator, context):
 
@@ -99,7 +99,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
         # if (number_faces > 0)
 
-        return detection_pb2.ReplyRecognition(status = '0', message = "Salvo")
+        return detection_pb2.ReplyDetection(status = '0', message = "Salvo")
 
     self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     detection_pb2_grpc.add_DetectionServicer_to_server(Servicer(), self.server)

@@ -53,7 +53,7 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
 
         # Retorna status ao servidor 1
         message = "Imagem " + file_name + " Salva com sucesso"
-        return trainingRecognition_pb2.ReplySaveImage(status = '0', message = message)
+        return trainingRecognition_pb2.ReplyRecognition(status = '0', message = message)
 
     self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     trainingRecognition_pb2_grpc.add_TrainingRecognitionServicer_to_server(Servicer(), self.server)
