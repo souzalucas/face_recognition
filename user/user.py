@@ -3,14 +3,14 @@ from tkinter import Tk
 import tkinter.filedialog
 from tkinter import *
 import grpc
-from ..facial_detection_server import facialDetection_pb2, facialDetection_pb2_grpc
+import facialDetection_pb2, facialDetection_pb2_grpc
 
 CHUNK_SIZE = 1  # 1MB
 
 class User:
     def __init__(self, address):
         channel = grpc.insecure_channel(address)
-        self.stub = facialDetection_pb2_grpc.recognitionFacialStub(channel)
+        self.stub = facialDetection_pb2_grpc.FacialDetectionStub(channel)
         
 
     def get_file_chunks(self, filename):
@@ -19,12 +19,12 @@ class User:
               piece = f.read(CHUNK_SIZE)
               if len(piece) == 0:
                   return
-              yield facialDetection_pb2.Chunk(buffer=piece)
+              yield facialDetection_pb2.Chunk(buffer=piece,nameFile="teste.py",identifier="alanzito",ipPort="localhost:8000" ,op=1)
 
 
-    def upload(self, in_file_name):
-        chunks_generator = get_file_chunks(in_file_name)
-        response = self.stub.upload(chunks_generator)
+    def uploadClient(self, in_file_name):
+        chunks_generator = self.get_file_chunks(in_file_name)
+        response = self.stub.UploadDetection(chunks_generator)
         assert response.length == os.path.getsize(in_file_name)
 
 user = User('localhost:8000')
@@ -35,4 +35,4 @@ in_file_name = root.tk.splitlist(files)
 
 print(in_file_name[0])
 
-user.upload(in_file_name[0])
+user.uploadClient(in_file_name[0])

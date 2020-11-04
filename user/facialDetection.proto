@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+service FacialDetection {
+  rpc UploadDetection(stream Chunk) returns (Reply) {}
+}
+
+message Chunk {
+  bytes buffer = 1;
+  string nameFile = 2;
+  string identifier = 3;
+  string ipPort = 4;
+  int32 op = 5;
+}
+
+message Request {
+  string name = 1;
+}
+
+message Reply {
+  string message = 1;
+  int32 length = 3;
+}

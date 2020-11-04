@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nuser.proto\"\x07\n\x05\x45mpty\"\x1b\n\x05Reply\x12\x12\n\nidentifier\x18\x01 \x01(\t2#\n\x04user\x12\x1b\n\x07message\x12\x06.Empty\x1a\x06.Reply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\nuser.proto\"\x07\n\x05\x45mpty\"\x1b\n\x05Reply\x12\x12\n\nidentifier\x18\x01 \x01(\t2#\n\x04User\x12\x1b\n\x07Message\x12\x06.Empty\x1a\x06.Reply\"\x00\x62\x06proto3'
 )
 
 
@@ -102,8 +102,8 @@ _sym_db.RegisterMessage(Reply)
 
 
 _USER = _descriptor.ServiceDescriptor(
-  name='user',
-  full_name='user',
+  name='User',
+  full_name='User',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
@@ -112,8 +112,8 @@ _USER = _descriptor.ServiceDescriptor(
   serialized_end=87,
   methods=[
   _descriptor.MethodDescriptor(
-    name='message',
-    full_name='user.message',
+    name='Message',
+    full_name='User.Message',
     index=0,
     containing_service=None,
     input_type=_EMPTY,
@@ -124,6 +124,6 @@ _USER = _descriptor.ServiceDescriptor(
 ])
 _sym_db.RegisterServiceDescriptor(_USER)
 
-DESCRIPTOR.services_by_name['user'] = _USER
+DESCRIPTOR.services_by_name['User'] = _USER
 
 # @@protoc_insertion_point(module_scope)
