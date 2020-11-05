@@ -6,7 +6,6 @@ import time
 
 import cv2
 
-
 import trainingRecognition_pb2, trainingRecognition_pb2_grpc
 import detection, recognition, training
 
@@ -45,6 +44,10 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
         user_name = request_list[0].userName
 
         # Criando pasta para o usuario, caso nao tenha
+        if not os.path.isdir("server2_images"):
+          os.mkdir("server2_images")
+
+        # Criando pasta para o usuario, caso nao tenha
         if not os.path.isdir("server2_images/" + user_name):
           os.mkdir("server2_images/" + user_name)
 
@@ -64,6 +67,10 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
 
         # Captura informacoes do arquivo e do usuario
         file_name = request_list[0].fileName
+
+        # Criando pasta para o usuario, caso nao tenha
+        if not os.path.isdir("server2_images"):
+          os.mkdir("server2_images")
 
         # Montando nome do arquivo
         tmp_file_name = "server2_images/img." + file_name

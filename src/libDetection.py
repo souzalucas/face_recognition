@@ -55,6 +55,10 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         file_number = request_list[0].fileNumber
         user_name = request_list[0].userName
 
+        # Criando pasta para o usuario, caso nao tenha
+        if not os.path.isdir("server1_images"):
+          os.mkdir("server1_images")
+
         # Montando nome do arquivo
         tmp_file_name = "server1_images/" + user_name + "." + str(file_number) + "." + file_name.split('.')[-1]
 
@@ -91,6 +95,10 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
         # Captura nome do arquivo
         file_name = request_list[0].fileName
+
+        # Criando pasta para o usuario, caso nao tenha
+        if not os.path.isdir("server1_images"):
+          os.mkdir("server1_images")
 
         # Montando nome do arquivo
         now = datetime.now()
