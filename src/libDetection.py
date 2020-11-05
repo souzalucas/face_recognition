@@ -13,7 +13,7 @@ import cv2
 from datetime import datetime
 
 
-CHUNK_SIZE = 1  # 1MB
+CHUNK_SIZE = 1  
 
 # Funcao que divide o arquivo em partes
 def get_file_chunks(file_name, file_number, user_name):
