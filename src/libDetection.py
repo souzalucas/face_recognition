@@ -114,9 +114,9 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         number_faces, detectedFaces, grayImage = self.detec.start(image)
 
         if(number_faces == 0):
-          return detection_pb2.ReplyDetection(status = '1', message = "Imagem não contém um rosto")
+          return detection_pb2.ReplyDetection(status = '1', message = " Imagem não contém um rosto")
         elif(number_faces > 1):
-          return detection_pb2.ReplyDetection(status = '2', message = "Imagem tem mais de um rosto")
+          return detection_pb2.ReplyDetection(status = '2', message = " Imagem tem mais de um rosto")
         else:
           # Envia imagem para o servidor 2
           chunks_generator = get_file_chunks(file_name=tmp_file_name, op_id=2)
