@@ -3,46 +3,64 @@ import os
 import numpy as np
 
 class Training():
-  def __init__(self):
-    # Algoritmos
-    self.eigenface = cv2.face.EigenFaceRecognizer_create()
-    self.fisherface = cv2.face.FisherFaceRecognizer_create()
-    self.lbph = cv2.face.LBPHFaceRecognizer_create()
+  # def __init__(self):
+  #   # Algoritmos
+  #   self.eigenface = cv2.face.EigenFaceRecognizer_create()
+  #   self.fisherface = cv2.face.FisherFaceRecognizer_create()
+  #   self.lbph = cv2.face.LBPHFaceRecognizer_create()
 
   # Retorna as imagens dos rostos com seus respectivos ids (labels)
   # para serem usados no treinamento do algoritmo
-  def getImageWithId(self):
-    # Capturando todos os caminhos das fotos
-    paths = [os.path.join('fotos', f) for f in os.listdir('fotos')]
-
+  def getImageWithId(self, file_name):
+    
     # Listas de faces e ids (labels)
     faces = []
     ids = []
 
-    for imagePath in paths:
-      # Converte imagem do rosto para tons de cinza
-      imageFace = cv2.cvtColor(cv2.imread(imagePath), cv2.COLOR_BGR2GRAY)
+    # Listando pastas dos individuos
+    for root, dirnames, filenames in os.walk("./server2_images"):
+      folders = dirnames
+      break
 
-      # Captura o id da imagem
-      id = int(os.path.split(imagePath)[-1].split('.')[1])
+    # Itera pelas pastas de cada individuo
+    for idx,f in enumerate(folders, 1):
 
-      # Adiciona o id e a imagem do rosto em suas respectivas listas
-      ids.append(id)
-      faces.append(imageFace)
+      # Capturando os caminhos das fotos daquele individuo
+      paths = [os.path.join("./server2_images/"+f, a) for a in os.listdir("./server2_images/"+f)]
+
+      # Itera sobre cada foto daquele individuo
+      for imagePath in paths:
+        # Converte imagem do rosto para tons de cinza
+        imageFace = cv2.cvtColor(cv2.imread(imagePath), cv2.COLOR_BGR2GRAY)
+        
+        # Adiciona o id e a imagem do rosto em suas respectivas listas
+        ids.append(idx)
+        faces.append(imageFace)
+      
+      # Salvando arquivo de mapeamento 
+      name_map = "./server2_images/map." + file_name.split(".")[0] + file_name.split(".")[1]  + ".txt"
+      fileMap = open(name_map, 'a')
+      fileMap.write(str(idx)+"="+f+"\n")
+      fileMap.close()
 
     # Retorna as listas para treinamento
-    return np.array(ids), faces
+    return np.array(ids), faces, name_map
 
   # Realiza o treinamento do algoritmo Eigenface
-  def eigenface(self):
+  def eigenface(self, file_name):
+    eigenFace = cv2.face.EigenFaceRecognizer_create()
     # Gerando labes para as imagens
-    ids, faces = self.getImageWithId()
+    ids, faces, name_map = self.getImageWithId(file_name)
 
     # Treinando o algoritmo
-    eigenface.train(faces, ids)
+    eigenFace.train(faces, ids)
  
     # Salvando arquivo de treinamento
-    eigenface.write('classifierEingen.yml')
+    file_name = "./server2_images/classifierEigen." + file_name.split(".")[0] + file_name.split(".")[1] + ".yml"
+    eigenFace.write(file_name)
+
+    # Retorna o nome do arquivo de treinamento e mapeamento
+    return file_name, name_map
 
   # Realiza o treinamento do algoritmo Fisherface
   def fisherFace(self):

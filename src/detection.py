@@ -5,7 +5,7 @@ import os
 class DetectionFaces:
   def __init__(self):
     # Detector de faces
-    self.detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    self.detector = cv2.CascadeClassifier('opencv_cascades/haarcascade_frontalface_default.xml')
     
   def start(self, image):
     # Converte para tons de cinza

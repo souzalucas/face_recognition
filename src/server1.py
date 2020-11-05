@@ -1,4 +1,4 @@
 import libDetection
 
 if __name__ == '__main__':
-  libDetection.ServerDetection().start(8888)
+  libDetection.ServerDetection().start(8000)

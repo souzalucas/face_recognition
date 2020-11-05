@@ -13,17 +13,20 @@ import cv2
 from datetime import datetime
 
 
-CHUNK_SIZE = 1  
+CHUNK_SIZE = 1024 * 1024  # 1MB
 
 # Funcao que divide o arquivo em partes
-def get_file_chunks(file_name, file_number, user_name):
+def get_file_chunks(file_name=None, file_number=None, user_name=None, op_id=None):
   with open(file_name, 'rb') as f:
     while True:
       piece = f.read(CHUNK_SIZE)
       if len(piece) == 0:
         return
-      yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1], 
-                                           fileNumber = file_number, userName = user_name)
+      if(op_id == 1):
+        yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1], 
+                                             fileNumber = file_number, userName = user_name)
+      else:
+        yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1])
 
 # Funcao que junta as partes do arquivo faz a gravacao
 def save_chunks_to_file(chunks, filename):
@@ -40,7 +43,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         self.detec = detection.DetectionFaces()
 
         # Conectando ao segundo servidor
-        self.channel = grpc.insecure_channel('localhost:8889')
+        self.channel = grpc.insecure_channel('localhost:8001')
         self.stub = trainingRecognition_pb2_grpc.TrainingRecognitionStub(self.channel)
 
       def imageSave(self, request_iterator, context):
@@ -69,8 +72,13 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         elif(number_faces > 1):
           return detection_pb2.ReplyDetection(status = '2', message = "Imagem" + file_name + "Tem mais de um rosto")
         else:
+          # Corta a imagem pegando apenas o rosto
+          for(x, y, l, a) in detectedFaces:
+            imagemFace = cv2.resize(grayImage[y:y + a, x:x + l], (220, 220))
+            cv2.imwrite(tmp_file_name, imagemFace)
+
           # Envia imagem para o servidor 2
-          chunks_generator = get_file_chunks(tmp_file_name, file_number, user_name)
+          chunks_generator = get_file_chunks(tmp_file_name, file_number, user_name, 1)
           response = self.stub.saveImage(chunks_generator)
           # Apaga imagem temporaria
           os.remove(tmp_file_name)
@@ -86,7 +94,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
         # Montando nome do arquivo
         now = datetime.now()
-        tmp_file_name = "server1_images/" + str(now) + file_name.split(".")[-1]
+        tmp_file_name = "server1_images/" + str(now) + "." + file_name.split(".")[-1]
 
         # Salva imagem em uma pasta para ser usada
         save_chunks_to_file(request_list, tmp_file_name)
@@ -97,9 +105,19 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         # Chama a funcao para detectar as faces na imagem
         number_faces, detectedFaces, grayImage = self.detec.start(image)
 
-        # if (number_faces > 0)
+        if(number_faces == 0):
+          return detection_pb2.ReplyDetection(status = '1', message = "Imagem não contém um rosto")
+        elif(number_faces > 1):
+          return detection_pb2.ReplyDetection(status = '2', message = "Imagem tem mais de um rosto")
+        else:
+          # Envia imagem para o servidor 2
+          chunks_generator = get_file_chunks(file_name=tmp_file_name, op_id=2)
+          response = self.stub.recognize(chunks_generator)
+          # Apaga imagem temporaria
+          os.remove(tmp_file_name)
+          # Retorna a resposta do servidor 2
+          return detection_pb2.ReplyDetection(status = response.status, message = response.message)
 
-        return detection_pb2.ReplyDetection(status = '0', message = "Salvo")
 
     self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
     detection_pb2_grpc.add_DetectionServicer_to_server(Servicer(), self.server)
