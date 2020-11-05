@@ -7,7 +7,7 @@ import time
 import trainingRecognition_pb2, trainingRecognition_pb2_grpc
 import detection, recognition, training
 
-CHUNK_SIZE = 1 # 1MB
+CHUNK_SIZE = 1 
 
 # Funcao que divide o arquivo em partes
 def get_file_chunks(filename):
