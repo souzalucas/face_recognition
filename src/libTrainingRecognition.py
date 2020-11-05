@@ -7,7 +7,7 @@ import time
 import cv2
 
 import trainingRecognition_pb2, trainingRecognition_pb2_grpc
-import detection, recognition, training
+import opencvDetection, opencvRecognition, opencvTraining
 
 CHUNK_SIZE = 1024 * 1024 # 1MB
 
@@ -31,10 +31,11 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
 
     class Servicer(trainingRecognition_pb2_grpc.TrainingRecognitionServicer):
       def __init__(self):
-        # Instanciando detector, treinandor e o reconhecedor de faces
-        self.detec = detection.DetectionFaces()
-        self.train = training.Training()
-        self.rec = recognition.RecognitionFaces()
+        # Instanciando as bibliotecas implementadas para
+        # deteccao, treinamento e o reconhecimento
+        self.opencvDetec = opencvDetection.DetectionFaces()
+        self.opencvTrain = opencvTraining.Training()
+        self.opencvRec = opencvRecognition.RecognitionFaces()
 
       def saveImage(self, request_iterator, context):
         request_list = [request_rows for request_rows in request_iterator]
@@ -79,11 +80,11 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
         save_chunks_to_file(request_list, tmp_file_name)
 
         # Realiza o treinamento do algoritmo
-        yml_file_name, map_file_name = self.train.eigenface(file_name)
+        yml_file_name, map_file_name = self.opencvTrain.train(file_name, "fisherface")
 
         # Faz o reconhecimento do individuo
         image = cv2.imread(tmp_file_name)
-        person = self.rec.eigenface(image, map_file_name, yml_file_name)
+        person = self.opencvRec.recognition(image, map_file_name, yml_file_name, "fisherface")
 
         # Exclui os arquivos temporarios
         os.remove(tmp_file_name)

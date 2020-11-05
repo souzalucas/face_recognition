@@ -31,7 +31,7 @@ class Client:
     channel = grpc.insecure_channel(address)
     self.stub = detection_pb2_grpc.DetectionStub(channel)
 
-  def upload(self, file_name, file_number, user_name):
+  def uploadImage(self, file_name, file_number, user_name):
     chunks_generator = get_file_chunks(file_name, file_number, user_name, 1)
     response = self.stub.imageSave(chunks_generator)
     print(response.message)
@@ -47,8 +47,8 @@ if __name__ == '__main__':
   # Enviando imagem pra salvar no servidor 2
   # file_name = sys.argv[1]
 
-  # client.upload(file_name, int(file_name.split(".")[0]), 'Rodolfo')
-  client.recognition('3.jpg')
+  # client.uploadImage("5.png", 1, 'Rodolfo')
+  client.recognition('4.jpg')
 
   # Enviando imagem para reconhecer
   # client.recognition(file_name)

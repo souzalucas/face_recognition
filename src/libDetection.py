@@ -6,7 +6,8 @@ import time
 
 import detection_pb2, detection_pb2_grpc
 import trainingRecognition_pb2, trainingRecognition_pb2_grpc
-import detection, recognition, training
+
+import opencvDetection, opencvRecognition, opencvTraining
 
 import cv2
 
@@ -39,8 +40,9 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
     class Servicer(detection_pb2_grpc.DetectionServicer):
       def __init__(self):
-        # Instanciando detector de faces
-        self.detec = detection.DetectionFaces()
+        # Instanciando a biblioteca implementada para
+        # deteccao de faces
+        self.opencvDetec = opencvDetection.DetectionFaces()
 
         # Conectando ao segundo servidor
         self.channel = grpc.insecure_channel('localhost:8001')
@@ -69,12 +71,12 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         image = cv2.imread(tmp_file_name)
 
         # Chama a funcao para detectar as faces na imagem
-        number_faces, detectedFaces, grayImage = self.detec.start(image)
+        number_faces, detectedFaces, grayImage = self.opencvDetec.start(image)
 
         if(number_faces == 0):
-          return detection_pb2.ReplyDetection(status = '1', message = "Imagem" + file_name + "Não contém um rosto")
+          return detection_pb2.ReplyDetection(status = '1', message = "Imagem" + file_name + " Não contém um rosto")
         elif(number_faces > 1):
-          return detection_pb2.ReplyDetection(status = '2', message = "Imagem" + file_name + "Tem mais de um rosto")
+          return detection_pb2.ReplyDetection(status = '2', message = "Imagem" + file_name + " Tem mais de um rosto")
         else:
           # Corta a imagem pegando apenas o rosto
           for(x, y, l, a) in detectedFaces:
@@ -111,12 +113,12 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         image = cv2.imread(tmp_file_name)
 
         # Chama a funcao para detectar as faces na imagem
-        number_faces, detectedFaces, grayImage = self.detec.start(image)
+        number_faces, detectedFaces, grayImage = self.opencvDetec.start(image)
 
         if(number_faces == 0):
-          return detection_pb2.ReplyDetection(status = '1', message = " Imagem não contém um rosto")
+          return detection_pb2.ReplyDetection(status = '1', message = "Imagem não contém um rosto")
         elif(number_faces > 1):
-          return detection_pb2.ReplyDetection(status = '2', message = " Imagem tem mais de um rosto")
+          return detection_pb2.ReplyDetection(status = '2', message = "Imagem tem mais de um rosto")
         else:
           # Envia imagem para o servidor 2
           chunks_generator = get_file_chunks(file_name=tmp_file_name, op_id=2)
