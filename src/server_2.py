@@ -12,15 +12,6 @@ import opencvDetection, opencvRecognition, opencvTraining
 
 CHUNK_SIZE = 1024 * 1024 # 1MB
 
-# Funcao que divide o arquivo em partes
-def get_file_chunks(filename):
-  with open(filename, 'rb') as f:
-    while True:
-      piece = f.read(CHUNK_SIZE)
-      if len(piece) == 0:
-        return
-      yield trainingRecognition_pb2.Piece(buffer=piece)
-
 # Funcao que junta as partes do arquivo faz a gravacao
 def save_chunks_to_file(chunks, filename):
   with open(filename, 'wb') as f:
@@ -70,8 +61,9 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
         # para mais facil manipulacao
         request_list = [request_rows for request_rows in request_iterator]
 
-        # Captura informacoes do arquivo e do usuario
+        # Captura informacoes do arquivo e do classificador a ser usado
         file_name = request_list[0].fileName
+        classifier = request_list[0].classifier
 
         # Criando pasta para o usuario, caso nao tenha
         if not os.path.isdir("server2_images"):
@@ -84,11 +76,11 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
         save_chunks_to_file(request_list, tmp_file_name)
 
         # Realiza o treinamento do algoritmo
-        yml_file_name, map_file_name = self.opencvTrain.train(file_name, "fisherface")
+        yml_file_name, map_file_name = self.opencvTrain.train(file_name, classifier)
 
         # Faz o reconhecimento do individuo
         image = cv2.imread(tmp_file_name)
-        person = self.opencvRec.recognition(image, map_file_name, yml_file_name, "fisherface")
+        person = self.opencvRec.recognition(image, map_file_name, yml_file_name, classifier)
 
         # Exclui os arquivos temporarios
         os.remove(tmp_file_name)

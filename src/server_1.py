@@ -12,8 +12,8 @@ import opencvDetection, opencvRecognition, opencvTraining
 
 CHUNK_SIZE = 1024 * 1024  # 1MB
 
-# Funcao que divide o arquivo em partes
-def get_file_chunks(file_name=None, user_name=None, op_id=None):
+# Funcao que divide o arquivo em partes e retorna a estrutura da requisicao
+def get_file_chunks(file_name=None, user_name=None, classifier=None, op_id=None):
   with open(file_name, 'rb') as f:
     while True:
       piece = f.read(CHUNK_SIZE)
@@ -23,7 +23,8 @@ def get_file_chunks(file_name=None, user_name=None, op_id=None):
         yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1], 
                                             userName = user_name)
       else:
-        yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1])
+        yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1], 
+                                            classifier=classifier)
 
 # Funcao que junta as partes do arquivo faz a gravacao
 def save_chunks_to_file(chunks, filename):
@@ -85,7 +86,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
             cv2.imwrite(tmp_file_name, imagemFace)
 
           # Envia imagem para o servidor 2
-          chunks_generator = get_file_chunks(tmp_file_name, user_name, 1)
+          chunks_generator = get_file_chunks(file_name=tmp_file_name, user_name=user_name, op_id=1)
           response = self.stub.saveImage(chunks_generator)
           # Apaga imagem temporaria
           os.remove(tmp_file_name)
@@ -96,8 +97,9 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
         request_list = [request_rows for request_rows in request_iterator]
 
-        # Captura nome do arquivo
+        # Captura informacoes do arquivo e do classificador a ser usado
         file_name = request_list[0].fileName
+        classifier = request_list[0].classifier
 
         # Criando pasta para o usuario, caso nao tenha
         if not os.path.isdir("server1_images"):
@@ -125,7 +127,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
           return detection_pb2.ReplyDetection(status = '2', message = "Imagem tem mais de um rosto")
         else:
           # Envia imagem para o servidor 2
-          chunks_generator = get_file_chunks(file_name=tmp_file_name, op_id=2)
+          chunks_generator = get_file_chunks(file_name=tmp_file_name, classifier=classifier, op_id=2)
           response = self.stub.recognize(chunks_generator)
           # Apaga imagem temporaria
           os.remove(tmp_file_name)
