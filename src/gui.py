@@ -67,7 +67,7 @@ class Application:
         self.save_nomeLabel.pack(side=LEFT)
 
         self.nome = Entry(self.segundoContainer)
-        self.nome["width"] = 20
+        self.nome["width"] = 30
         self.nome["font"] = self.fontePadrao
         self.nome.pack(side=LEFT)
 
