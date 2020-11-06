@@ -1,3 +1,10 @@
+## server_1.py
+# Codigo do primeiro servidor de um programa que reconhece rostos
+# a partir de algumas imagens fornecidas pelo usuario,
+# o cliente deve escolher entre tres algoritmos classificadores
+# Criado em: 20/10/2020
+# Atualizado em: 06/11/2020
+
 import os
 from concurrent import futures
 import grpc

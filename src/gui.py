@@ -8,18 +8,24 @@ import cv2
 class Application:
     def __init__(self, master=None, client=None):      
 
+        # Cliente
         self.client = client
 
-        self.vet_images = []
+        # vetor do caminho das imagens selecionadas
+        self.save_vet_images = []
 
+        # Nome do algoritmo selecionado pelo usuario
         self.algoritmo = IntVar()
 
+        # Coluna para enviar imagens
         self.frameEsquerdo = Frame(master, width = 300, height = 100, relief = 'raised')
         self.frameEsquerdo.grid(row = 1, column = 0,  sticky="nsew")
 
+        # Coluna para reconhecer uma pessoa
         self.frameDireito = Frame(master, width = 300, height = 100, relief = 'raised')
         self.frameDireito.grid(row = 1, column = 1,  sticky="nsew")
 
+        # Fonte do texto
         self.fontePadrao = ("Arial", "10")
 
         # Lado esquerdo
@@ -27,6 +33,7 @@ class Application:
         self.primeiroContainer["pady"] = 10
         self.primeiroContainer.pack()
 
+        #### Definicao dos containters da primeira coluna
         self.segundoContainer = Frame(self.frameEsquerdo)
         self.segundoContainer["padx"] = 20
         self.segundoContainer.pack()
@@ -44,6 +51,7 @@ class Application:
         self.quintoContainer["pady"] = 10
         self.quintoContainer.pack()
 
+        #### Botoes, labels, e caixas de texto da primeira coluna
         self.save_titulo = Label(self.primeiroContainer, text="Enviar suas fotos")
         self.save_titulo["font"] = ("Arial", "10", "bold")
         self.save_titulo.pack()
@@ -73,7 +81,7 @@ class Application:
         self.save_mensagem = scrolledtext.ScrolledText(self.quartoContainer,width=20,height=5, )
         self.save_mensagem.pack()
 
-        # Lado direito
+        #### Definicao dos containters da segunda coluna
         self.quintoContainer = Frame(self.frameDireito)
         self.quintoContainer["pady"] = 10
         self.quintoContainer.pack()
@@ -97,7 +105,8 @@ class Application:
         self.decimoContainer = Frame(self.frameDireito)
         self.decimoContainer["pady"] = 10
         self.decimoContainer.pack()
-        
+
+        #### Botoes, labels, radios e caixas de texto da segunda coluna        
         self.rec_titulo = Label(self.quintoContainer, text="Reconhecer uma pessoa")
         self.rec_titulo["font"] = ("Arial", "10", "bold")
         self.rec_titulo.pack()

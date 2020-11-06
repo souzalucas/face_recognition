@@ -1,3 +1,9 @@
+## opencvRecognition.py
+# Biblioteca implementada a partir do opencv para reconhecer
+# um rosto com tres algoritmos de classificacao
+# Criado em: 20/10/2020
+# Atualizado em: 06/11/2020
+ 
 import cv2
 import opencvDetection
 

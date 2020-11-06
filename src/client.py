@@ -1,12 +1,12 @@
-from concurrent import futures
+## client.py
+# Codigo cliente de um programa que reconhece rostos
+# a partir de algumas imagens fornecidas pelo usuario,
+# o cliente deve escolher entre tres algoritmos classificadores
+# Criado em: 20/10/2020
+# Atualizado em: 06/11/2020
+
 import grpc
-import time
 from proto import detection_pb2, detection_pb2_grpc
-from tkinter import Tk
-import tkinter.filedialog
-from tkinter import *
-import threading
-import gui
 
 # Funcao que divide o arquivo em partes e retorna a estrutura da requisicao
 def get_file_chunks(file_name=None, user_name=None, classifier=None, op_id=None):

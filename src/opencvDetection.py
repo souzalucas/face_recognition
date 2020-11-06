@@ -1,3 +1,9 @@
+## opencvDetection.py
+# Biblioteca implementada a partir do opencv para detectar
+# quantos rostos constam em uma foto
+# Criado em: 20/10/2020
+# Atualizado em: 06/11/2020
+ 
 import cv2
 
 class DetectionFaces:

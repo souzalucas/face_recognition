@@ -1,3 +1,9 @@
+## opencvTraining.py
+# Biblioteca implementada a partir do opencv para treinar
+# tres algoritmos de classificacao
+# Criado em: 20/10/2020
+# Atualizado em: 06/11/2020
+
 import cv2
 import os
 import numpy as np
