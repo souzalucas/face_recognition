@@ -1,3 +1,9 @@
+## opencvRecognition.py
+# Biblioteca implementada a partir do opencv para reconhecer
+# um rosto com tres algoritmos de classificacao
+# Criado em: 20/10/2020
+# Atualizado em: 06/11/2020
+
 from tkinter import *
 from tkinter import scrolledtext
 import tkinter.filedialog
@@ -45,6 +51,7 @@ class Application:
 
         self.quartoContainer = Frame(self.frameEsquerdo)
         self.quartoContainer["pady"] = 10
+        self.quartoContainer["padx"] = 10
         self.quartoContainer.pack()
 
         self.quintoContainer = Frame(self.frameEsquerdo)
@@ -78,7 +85,7 @@ class Application:
         self.save_botao_enviar["command"] = self.enviar_imagens
         self.save_botao_enviar.pack()
 
-        self.save_mensagem = scrolledtext.ScrolledText(self.quartoContainer,width=20,height=5, )
+        self.save_mensagem = scrolledtext.ScrolledText(self.quartoContainer,width=25,height=5)
         self.save_mensagem.pack()
 
         #### Definicao dos containters da segunda coluna
@@ -104,6 +111,7 @@ class Application:
 
         self.decimoContainer = Frame(self.frameDireito)
         self.decimoContainer["pady"] = 10
+        self.decimoContainer["padx"] = 10
         self.decimoContainer.pack()
 
         #### Botoes, labels, radios e caixas de texto da segunda coluna        
@@ -131,14 +139,14 @@ class Application:
         R3 = Radiobutton(self.oitavoContainer, text="LBPH", variable=self.algoritmo, value=3)
         R3.pack( anchor = W )
 
-        self.rec_botao_eigen = Button(self.decimoContainer)
+        self.rec_botao_eigen = Button(self.nonoContainer)
         self.rec_botao_eigen["text"] = "Reconhecer"
         self.rec_botao_eigen["font"] = ("Calibri", "8")
         self.rec_botao_eigen["width"] = 15
         self.rec_botao_eigen["command"] = self.reconhecer
         self.rec_botao_eigen.pack()
 
-        self.rec_mensagem = scrolledtext.ScrolledText(self.nonoContainer,width=20,height=5)
+        self.rec_mensagem = scrolledtext.ScrolledText(self.decimoContainer,width=25,height=5)
         self.rec_mensagem.pack()
 
     # Funcao que usa uma interface grafica para o cliente selecionar as imagens
