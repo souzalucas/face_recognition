@@ -9,7 +9,6 @@ from tkinter import scrolledtext
 import tkinter.filedialog
 from multiprocessing.pool import ThreadPool
 import client
-import cv2
 
 class Application:
     def __init__(self, master=None, client=None):      
