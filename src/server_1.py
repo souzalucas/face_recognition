@@ -45,6 +45,9 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         self.channel = grpc.insecure_channel('localhost:8001')
         self.stub = trainingRecognition_pb2_grpc.TrainingRecognitionStub(self.channel)
 
+        # Permite que o openCV execute as funções de forma otimizada
+        cv2.useOptimized()
+
       def imageSave(self, request_iterator, context):
 
         # Transforma o request_iterator em uma lista

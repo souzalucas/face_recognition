@@ -9,6 +9,9 @@ class Training():
     self.classifierFisherface = cv2.face.FisherFaceRecognizer_create()
     self.classifierLbph = cv2.face.LBPHFaceRecognizer_create()
 
+    # Permite que o openCV execute as funções de forma otimizada
+    cv2.useOptimized()
+
   # Retorna as imagens dos rostos com seus respectivos ids (labels)
   # para serem usados no treinamento do algoritmo
   def getImageWithId(self, file_name):

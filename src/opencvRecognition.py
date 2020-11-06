@@ -1,6 +1,4 @@
 import cv2
-import numpy as np
-import os
 import opencvDetection
 
 class RecognitionFaces:
@@ -13,6 +11,9 @@ class RecognitionFaces:
     self.classifierEigenface = cv2.face.EigenFaceRecognizer_create()
     self.classifierFisherface = cv2.face.FisherFaceRecognizer_create()
     self.classifierLbph = cv2.face.LBPHFaceRecognizer_create()
+
+    # Permite que o openCV execute as funções de forma otimizada
+    cv2.useOptimized()
 
   # Funcao que faz o reconhecimento do individuo em uma foto
   # O nome do algoritmo deve ser passado no parametro classifier_name

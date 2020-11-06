@@ -1,11 +1,12 @@
 import cv2
-import numpy as np
-import os
 
 class DetectionFaces:
   def __init__(self):
     # Detector de faces
     self.detector = cv2.CascadeClassifier('opencv_cascades/haarcascade_frontalface_default.xml')
+
+    # Permite que o openCV execute as funções de forma otimizada
+    cv2.useOptimized()
     
   def start(self, image):
     # Converte para tons de cinza

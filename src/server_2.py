@@ -29,6 +29,9 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
         self.opencvTrain = opencvTraining.Training()
         self.opencvRec = opencvRecognition.RecognitionFaces()
 
+        # Permite que o openCV execute as funções de forma otimizada
+        cv2.useOptimized()
+
       def saveImage(self, request_iterator, context):
         request_list = [request_rows for request_rows in request_iterator]
 
