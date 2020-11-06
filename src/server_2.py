@@ -6,7 +6,7 @@ import cv2
 from datetime import datetime
 
 
-import trainingRecognition_pb2, trainingRecognition_pb2_grpc
+from proto import trainingRecognition_pb2, trainingRecognition_pb2_grpc
 
 import opencvDetection, opencvRecognition, opencvTraining
 

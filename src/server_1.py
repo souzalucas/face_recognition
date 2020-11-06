@@ -5,8 +5,8 @@ import time
 import cv2
 from datetime import datetime
 
-import detection_pb2, detection_pb2_grpc
-import trainingRecognition_pb2, trainingRecognition_pb2_grpc
+from proto import detection_pb2, detection_pb2_grpc
+from proto import trainingRecognition_pb2, trainingRecognition_pb2_grpc
 
 import opencvDetection, opencvRecognition, opencvTraining
 
@@ -79,9 +79,13 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
         # A imagem deve conter apenas um rosto
         if(number_faces == 0):
-          return detection_pb2.ReplyDetection(status = '1', message = "Imagem" + file_name + " Não contém um rosto")
+          # Apaga imagem temporaria
+          os.remove(tmp_file_name)
+          return detection_pb2.ReplyDetection(status = '1', message = "Imagem " + file_name + " Não contém um rosto")
         elif(number_faces > 1):
-          return detection_pb2.ReplyDetection(status = '2', message = "Imagem" + file_name + " Tem mais de um rosto")
+          # Apaga imagem temporaria
+          os.remove(tmp_file_name)
+          return detection_pb2.ReplyDetection(status = '2', message = "Imagem " + file_name + " Tem mais de um rosto")
         else:
           # Corta a imagem pegando apenas o rosto
           for(x, y, l, a) in detectedFaces:
@@ -125,8 +129,12 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
         # A imagem deve conter apenas um rosto
         if(number_faces == 0):
+          # Apaga imagem temporaria
+          os.remove(tmp_file_name)
           return detection_pb2.ReplyDetection(status = '1', message = "Imagem não contém um rosto")
         elif(number_faces > 1):
+          # Apaga imagem temporaria
+          os.remove(tmp_file_name)
           return detection_pb2.ReplyDetection(status = '2', message = "Imagem tem mais de um rosto")
         else:
           # Envia imagem para o servidor 2
