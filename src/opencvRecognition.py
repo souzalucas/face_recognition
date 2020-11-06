@@ -14,6 +14,8 @@ class RecognitionFaces:
     self.classifierFisherface = cv2.face.FisherFaceRecognizer_create()
     self.classifierLbph = cv2.face.LBPHFaceRecognizer_create()
 
+  # Funcao que faz o reconhecimento do individuo em uma foto
+  # O nome do algoritmo deve ser passado no parametro classifier_name
   def recognition(self, image, map_file_name, yml_file_name, classifier_name):
 
     idx = 1
@@ -26,6 +28,7 @@ class RecognitionFaces:
       # Faz o corte da imagem deixando apenas o rosto
       imageFace = cv2.resize(grayImage[y:y + a, x:x + l], (220, 220))
            
+      # Escolhe o algoritmo de reconhecimento
       if (classifier_name == "eigenface"):
         # Arquivo do algoritmo treinado
         self.classifierEigenface.read(yml_file_name)
@@ -51,35 +54,3 @@ class RecognitionFaces:
             return  (line.split("=")[-1]).rstrip('\n')
     
     return "1"
-    
-  # # Reconhecedor Eingenface
-  # def eigenface(self, image, map_file_name, yml_file_name):
-
-  #   # Arquivo do algoritmo treinado
-  #   self.classifierEigenface.read(yml_file_name)
-
-  #   # Faz a deteccao de faces
-  #   number, detectedFaces, grayImage = self.detector.start(image)
-
-  #   # Realiza o reconhecimento
-  #   for(x, y, l, a) in detectedFaces:
-  #     # Faz o corte da imagem deixando apenas o rosto
-  #     imageFace = cv2.resize(grayImage[y:y + a, x:x + l], (220, 220))
-           
-  #     # Reconhece o individuo retornando seu id e a confianca
-  #     idx, confidence = self.classifierEigenface.predict(imageFace)
-
-  #     # Procura o nome da pessoa no arquivo de mapeamento
-  #     with open(map_file_name) as file_map:
-  #       for line in file_map:
-  #         if(int(line.split("=")[0]) == idx):
-  #           # Retorna o nome do individuo
-  #           return  (line.split("=")[-1]).rstrip('\n')
-    
-  #   return "1"
-
-  # def fisherFace(self, image):
-  #   self.eigenFace.read('classifierEingen.yml')
-
-  # def lbph(self, image):
-  #   self.eigenFace.read('classifierEingen.yml')

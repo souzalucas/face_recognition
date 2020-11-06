@@ -8,7 +8,6 @@ service Detection {
 message Chunk {
   bytes buffer = 1;
   string fileName = 2;
-  int32 fileNumber = 3;
   string userName = 4;
 }
 

@@ -46,6 +46,8 @@ class Training():
     # Retorna as listas para treinamento
     return np.array(ids), faces, name_map
 
+  # Funcao para treinar o algoritmo de reconhecimento
+  # O nome do algoritmo deve ser passado no parametro classifier_name
   def train(self, file_name, classifier_name):
     # Gerando labes para as imagens
     ids, faces, name_map = self.getImageWithId(file_name)
@@ -68,42 +70,4 @@ class Training():
     
     # Retorna o nome do arquivo de treinamento e mapeamento
     return file_name, name_map
-
-  # # Realiza o treinamento do algoritmo Eigenface
-  # def eigenface(self, file_name):
-    
-  #   # Gerando labes para as imagens
-  #   ids, faces, name_map = self.getImageWithId(file_name)
-
-  #   # Treinando o algoritmo
-  #   self.classifierEigenface.train(faces, ids)
- 
-  #   # Salvando arquivo de treinamento
-  #   file_name = "./server2_images/classifierEigen." + file_name.split(".")[0] + file_name.split(".")[1] + ".yml"
-  #   self.classifierEigenface.write(file_name)
-
-  #   # Retorna o nome do arquivo de treinamento e mapeamento
-  #   return file_name, name_map
-
-  # # Realiza o treinamento do algoritmo Fisherface
-  # def fisherFace(self):
-  #   # Gerando labes para as imagens
-  #   ids, faces = self.getImageWithId()
-
-  #   # Treinando o algoritmo
-  #   self.classifierFisherface.train(faces, ids)
- 
-  #   # Salvando arquivo de treinamento
-  #   self.classifierFisherface.write('classifierFisherface.yml')
-    
-  # # Realiza o treinamento do algoritmo LBPH
-  # def lbph(self):
-  #   # Gerando labes para as imagens
-  #   ids, faces = self.getImageWithId()
-
-  #   # Treinando o algoritmo
-  #   self.classifierLbph.train(faces, ids)
- 
-  #   # Salvando arquivo de treinamento
-  #   self.classifierLbph.write('classifierLbph.yml')
 

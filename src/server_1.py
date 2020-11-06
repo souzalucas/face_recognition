@@ -1,23 +1,19 @@
 import os
 from concurrent import futures
-
 import grpc
 import time
+import cv2
+from datetime import datetime
 
 import detection_pb2, detection_pb2_grpc
 import trainingRecognition_pb2, trainingRecognition_pb2_grpc
 
 import opencvDetection, opencvRecognition, opencvTraining
 
-import cv2
-
-from datetime import datetime
-
-
 CHUNK_SIZE = 1024 * 1024  # 1MB
 
 # Funcao que divide o arquivo em partes
-def get_file_chunks(file_name=None, file_number=None, user_name=None, op_id=None):
+def get_file_chunks(file_name=None, user_name=None, op_id=None):
   with open(file_name, 'rb') as f:
     while True:
       piece = f.read(CHUNK_SIZE)
@@ -25,7 +21,7 @@ def get_file_chunks(file_name=None, file_number=None, user_name=None, op_id=None
         return
       if(op_id == 1):
         yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1], 
-                                             fileNumber = file_number, userName = user_name)
+                                            userName = user_name)
       else:
         yield trainingRecognition_pb2.Piece(buffer=piece, fileName = file_name.split("/")[1])
 
@@ -50,11 +46,12 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
 
       def imageSave(self, request_iterator, context):
 
+        # Transforma o request_iterator em uma lista
+        # para mais facil manipulacao
         request_list = [request_rows for request_rows in request_iterator]
 
         # Captura informacoes do arquivo e do usuario
         file_name = request_list[0].fileName
-        file_number = request_list[0].fileNumber
         user_name = request_list[0].userName
 
         # Criando pasta para o usuario, caso nao tenha
@@ -62,7 +59,10 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
           os.mkdir("server1_images")
 
         # Montando nome do arquivo
-        tmp_file_name = "server1_images/" + user_name + "." + str(file_number) + "." + file_name.split('.')[-1]
+        # A data e hora atual sao usadas no nome do arquivo
+        # para evitar o conflito de nomes
+        now = str(datetime.now()).split(".")[-1]
+        tmp_file_name = "server1_images/" + user_name + "." + now + "." + file_name.split('.')[-1]
 
         # Salva imagem em uma pasta para ser usada
         save_chunks_to_file(request_list, tmp_file_name)
@@ -73,6 +73,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         # Chama a funcao para detectar as faces na imagem
         number_faces, detectedFaces, grayImage = self.opencvDetec.start(image)
 
+        # A imagem deve conter apenas um rosto
         if(number_faces == 0):
           return detection_pb2.ReplyDetection(status = '1', message = "Imagem" + file_name + " Não contém um rosto")
         elif(number_faces > 1):
@@ -84,7 +85,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
             cv2.imwrite(tmp_file_name, imagemFace)
 
           # Envia imagem para o servidor 2
-          chunks_generator = get_file_chunks(tmp_file_name, file_number, user_name, 1)
+          chunks_generator = get_file_chunks(tmp_file_name, user_name, 1)
           response = self.stub.saveImage(chunks_generator)
           # Apaga imagem temporaria
           os.remove(tmp_file_name)
@@ -103,6 +104,8 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
           os.mkdir("server1_images")
 
         # Montando nome do arquivo
+        # A data e hora atual sao usadas no nome do arquivo
+        # para evitar o conflito de nomes
         now = datetime.now()
         tmp_file_name = "server1_images/" + str(now) + "." + file_name.split(".")[-1]
 
@@ -115,6 +118,7 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         # Chama a funcao para detectar as faces na imagem
         number_faces, detectedFaces, grayImage = self.opencvDetec.start(image)
 
+        # A imagem deve conter apenas um rosto
         if(number_faces == 0):
           return detection_pb2.ReplyDetection(status = '1', message = "Imagem não contém um rosto")
         elif(number_faces > 1):
@@ -141,3 +145,6 @@ class ServerDetection(detection_pb2_grpc.DetectionServicer):
         time.sleep(60*60*24)
     except KeyboardInterrupt:
       self.server.stop(0)
+
+if __name__ == '__main__':
+  server = ServerDetection().start(8000)

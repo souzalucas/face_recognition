@@ -1,12 +1,13 @@
 import os
 from concurrent import futures
-
 import grpc
 import time
-
 import cv2
+from datetime import datetime
+
 
 import trainingRecognition_pb2, trainingRecognition_pb2_grpc
+
 import opencvDetection, opencvRecognition, opencvTraining
 
 CHUNK_SIZE = 1024 * 1024 # 1MB
@@ -53,17 +54,20 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
           os.mkdir("server2_images/" + user_name)
 
         # Montando nome do arquivo
+        now = str(datetime.now()).split(".")[-1]
         tmp_file_name = "server2_images/" + user_name + "/" + file_name
 
         # Salva imagem em uma pasta para ser usada
         save_chunks_to_file(request_list, tmp_file_name)
 
         # Retorna status ao servidor 1
-        message = "Imagem " + file_name + " Salva com sucesso"
+        message = "Imagem salva com sucesso no servidor"
         return trainingRecognition_pb2.ReplyRecognition(status = '0', message = message)
 
       def recognize(self, request_iterator, context):
         
+        # Transforma o request_iterator em uma lista
+        # para mais facil manipulacao
         request_list = [request_rows for request_rows in request_iterator]
 
         # Captura informacoes do arquivo e do usuario
@@ -109,3 +113,6 @@ class ServerTrainingRecognition(trainingRecognition_pb2_grpc.TrainingRecognition
         time.sleep(60*60*24)
     except KeyboardInterrupt:
       self.server.stop(0)
+
+if __name__ == '__main__':
+  server = ServerTrainingRecognition().start(8001)
