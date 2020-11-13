@@ -9,6 +9,7 @@ from tkinter import scrolledtext
 import tkinter.filedialog
 from multiprocessing.pool import ThreadPool
 import client
+import tkinter.ttk
 
 class Application:
     def __init__(self, master=None, client=None):      
@@ -17,7 +18,7 @@ class Application:
         self.client = client
 
         # vetor do caminho das imagens selecionadas
-        self.save_vet_images = []
+        self.vet_images = []
 
         # Nome do algoritmo selecionado pelo usuario
         self.algoritmo = IntVar()
@@ -26,9 +27,12 @@ class Application:
         self.frameEsquerdo = Frame(master, width = 300, height = 100, relief = 'raised')
         self.frameEsquerdo.grid(row = 1, column = 0,  sticky="nsew")
 
+        self.separador = tkinter.ttk.Separator (master, orient = "vertical" )
+        self.separador.grid (row = 1 , column = 1, sticky = "nesw" )
+
         # Coluna para reconhecer uma pessoa
         self.frameDireito = Frame(master, width = 300, height = 100, relief = 'raised')
-        self.frameDireito.grid(row = 1, column = 1,  sticky="nsew")
+        self.frameDireito.grid(row = 1, column = 2,  sticky="nsew")
 
         # Fonte do texto
         self.fontePadrao = ("Arial", "10")
@@ -58,17 +62,17 @@ class Application:
         self.quintoContainer.pack()
 
         #### Botoes, labels, e caixas de texto da primeira coluna
-        self.save_titulo = Label(self.primeiroContainer, text="Enviar suas fotos")
+        self.save_titulo = Label(self.primeiroContainer, text="ENVIAR SUAS FOTOS")
         self.save_titulo["font"] = ("Arial", "10", "bold")
         self.save_titulo.pack()
 
-        self.save_nomeLabel = Label(self.segundoContainer,text="Nome", font=self.fontePadrao)
-        self.save_nomeLabel.pack(side=LEFT)
+        self.save_nomeLabel = Label(self.segundoContainer,text="Nome Completo:", font=self.fontePadrao)
+        self.save_nomeLabel.pack(side=TOP)
 
         self.nome = Entry(self.segundoContainer)
-        self.nome["width"] = 30
+        self.nome["width"] = 25
         self.nome["font"] = self.fontePadrao
-        self.nome.pack(side=LEFT)
+        self.nome.pack()
 
         self.save_botao_selecionar = Button(self.terceiroContainer)
         self.save_botao_selecionar["text"] = "Selecionar imagens"
@@ -114,7 +118,7 @@ class Application:
         self.decimoContainer.pack()
 
         #### Botoes, labels, radios e caixas de texto da segunda coluna        
-        self.rec_titulo = Label(self.quintoContainer, text="Reconhecer uma pessoa")
+        self.rec_titulo = Label(self.quintoContainer, text="RECONHECER UMA PESSOA")
         self.rec_titulo["font"] = ("Arial", "10", "bold")
         self.rec_titulo.pack()
 
@@ -161,6 +165,9 @@ class Application:
     # Funcao que 
     def enviar_imagens(self):
 
+        # Limpando a caixa de texto para mostrar a resposta
+        self.save_mensagem.delete('1.0', END)
+
         nome = self.nome.get()
 
         # Verifica se o nome foi escrito
@@ -190,6 +197,9 @@ class Application:
 
     def reconhecer(self):
 
+        # Limpando a caixa de texto para mostrar a resposta
+        self.rec_mensagem.delete('1.0', END)
+        
         # Verifica a quantidade de imagens
         if (len(self.vet_images) != 1):
             self.rec_mensagem.insert(INSERT, "Escolha UMA imagem para reconhecer\n")
