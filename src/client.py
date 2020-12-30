@@ -1,4 +1,4 @@
-## client.py
+### client.py
 # Codigo cliente de um programa que reconhece rostos
 # a partir de algumas imagens fornecidas pelo usuario,
 # o cliente deve escolher entre tres algoritmos classificadores
